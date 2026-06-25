@@ -1,0 +1,44 @@
+# Prerequisite
+*.d
+
+# Object files (compiled code)
+*.o
+*.obj
+*.ko
+*.gch
+*.pch
+
+# Libraries and Linker files (compiled output)
+# Note: If your 'lib' folder contains pre-compiled third-party .lib or .a files 
+# that your project needs to build, uncomment the "Exclude" rule below.
+*.lib
+*.a
+*.la
+*.lo
+# !lib/                  # Uncomment this line if you want to keep files inside your 'lib' directory
+
+# Shared libraries (compiled output)
+*.dll
+*.so
+*.dylib
+
+# Executables (compiled programs)
+*.exe
+*.out
+*.app
+
+# IDE-specific files (Visual Studio, VS Code, CLion, Xcode)
+.vscode/
+.vs/
+*.user
+*.suo
+*.sln
+*.vcxproj
+*.filters
+cmake-build-debug/
+cmake-build-release/
+.idea/
+
+# Operating System temporary files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,67 @@
+#include "kutta.hpp"
+
+
+std::vector<double> RK4_step(
+    std::function<std::vector<double>(std::vector<double>)> f,
+    const std::vector<double>& p,
+    const double dt
+) {
+	const size_t N = p.size();
+	// p is the value of the vector at the previous step,
+	// q is the new value
+	const std::vector<double> k1 = f(p);
+
+	std::vector<double> p_midpoint(N, 0.0);
+	for (size_t i = 0; i < N; i++) {
+		p_midpoint[i] = p[i] + 0.5 * dt * k1[i];
+	}
+	const std::vector<double> k2 = f(p_midpoint);
+
+	std::vector<double> p_midpoint_refined(N, 0.0);
+	for (size_t i = 0; i < N; i++) {
+		p_midpoint_refined[i] = p[i] + 0.5 * dt * k2[i];
+	}
+	const std::vector<double> k3 = f(p_midpoint_refined);
+
+	std::vector<double> p_endpoint(N, 0.0);
+	for (size_t i = 0; i < N; i++) {
+		p_endpoint[i] = p[i] + dt * k3[i];
+	}
+	const std::vector<double> k4 = f(p_endpoint);
+
+	// output
+	std::vector<double> q(N, 0.0);
+	for (size_t i = 0; i < N; i++) {
+		q[i] = p[i] + (1.0 / 6.0) * dt * (
+			k1[i] + 2.0 * k2[i] + 2.0 * k3[i] + k4[i]
+			);
+	}
+	return q;
+}
+
+
+std::vector<std::vector<double>> RK4(
+	// function on the RHS of the runge kutta problem
+	std::function<std::vector<double>(std::vector<double>)> f, 
+    const std::vector<double>& initial_condition,
+    const double dt,
+    const size_t steps
+) {
+	// vector dimension (number of equations)
+	const size_t N = initial_condition.size();
+
+	std::vector<std::vector<double>> matrix(
+		steps, std::vector<double>(N, 0.0)
+		);
+	// assign the first step to the 0-th row
+	for (size_t i = 0; i < N; i++) {
+		matrix[0][i] = initial_condition[i];
+	}
+
+	for (size_t i = 0; i < steps - 1; i++) {
+		matrix[i+1] = RK4_step(
+			f, matrix[i], dt
+			);
+	}
+	return matrix;
+}
